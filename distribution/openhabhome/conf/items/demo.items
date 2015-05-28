@@ -25,15 +25,15 @@ Group:Number:AVG 				Temperature	"Avg. Room Temperature [%.1f °C]" 	<temperatur
 Group:Contact:OR(OPEN, CLOSED) 	Windows 	"Open windows [(%d)]"				<contact>		(All)
 
 /* Lights */
-Dimmer Light_GF_Living_Table 		"Table" 		(GF_Living, Lights)
-Switch Light_GF_Corridor_Ceiling 	"Ceiling" 		(GF_Corridor, Lights)
+Dimmer Light_GF_Living_Table 		"Table" 		(GF_Living, Lights) 
+Switch Light_GF_Corridor_Ceiling 	"Ceiling" 		(GF_Corridor, Lights) { homekit="1" }
 Switch Light_GF_Kitchen_Ceiling 	"Ceiling" 		(GF_Kitchen, Lights)
 Switch Light_GF_Kitchen_Table 		"Table" 		(GF_Kitchen, Lights)
 Switch Light_GF_Corridor_Wardrobe 	"Wardrobe"	 	(GF_Corridor, Lights)
 Switch Light_GF_Toilet_Ceiling 		"Ceiling" 		(GF_Toilet, Lights)
 Switch Light_GF_Toilet_Mirror 		"Mirror" 		(GF_Toilet, Lights)
 
-Switch Light_FF_Bath_Ceiling 		"Ceiling" 		(FF_Bath, Lights)
+Switch Light_FF_Bath_Ceiling 		"Ceiling" 		(FF_Bath, Lights) { homekit="2" }
 Switch Light_FF_Bath_Mirror 		"Mirror" 		(FF_Bath, Lights)
 Switch Light_FF_Corridor_Ceiling 	"Corridor" 		(FF_Corridor, Lights)
 Switch Light_FF_Office_Ceiling 		"Ceiling" 		(FF_Office, Lights)
