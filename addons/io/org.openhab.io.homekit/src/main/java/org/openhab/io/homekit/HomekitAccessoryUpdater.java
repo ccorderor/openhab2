@@ -1,4 +1,4 @@
-package com.beowulfe.openhab.homekit;
+package org.openhab.io.homekit;
 
 import org.eclipse.smarthome.core.types.State;
 

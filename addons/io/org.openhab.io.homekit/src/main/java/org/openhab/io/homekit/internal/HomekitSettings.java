@@ -1,4 +1,4 @@
-package com.beowulfe.openhab.homekit.internal;
+package org.openhab.io.homekit.internal;
 
 import java.util.Dictionary;
 
@@ -13,7 +13,7 @@ public class HomekitSettings {
 	private int port;
 	private String pin;
 	
-	public static HomekitSettings create(Dictionary<String, Object> properties) {
+	public static HomekitSettings create(Dictionary<String, ?> properties) {
 		HomekitSettings settings = new HomekitSettings();
 		String portString = (String) properties.get("port");
 		if (portString == null) {
@@ -49,5 +49,33 @@ public class HomekitSettings {
 	
 	public String getPin() {
 		return pin;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((pin == null) ? 0 : pin.hashCode());
+		result = prime * result + port;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		HomekitSettings other = (HomekitSettings) obj;
+		if (pin == null) {
+			if (other.pin != null)
+				return false;
+		} else if (!pin.equals(other.pin))
+			return false;
+		if (port != other.port)
+			return false;
+		return true;
 	}
 }

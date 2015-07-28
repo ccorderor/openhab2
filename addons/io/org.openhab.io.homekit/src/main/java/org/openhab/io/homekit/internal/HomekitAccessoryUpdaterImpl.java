@@ -1,4 +1,4 @@
-package com.beowulfe.openhab.homekit.internal;
+package org.openhab.io.homekit.internal;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,9 +10,9 @@ import org.eclipse.smarthome.core.events.AbstractEventSubscriber;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.State;
 import org.eclipse.smarthome.core.types.Type;
+import org.openhab.io.homekit.HomekitAccessoryUpdater;
 
 import com.beowulfe.hap.HomekitCharacteristicChangeCallback;
-import com.beowulfe.openhab.homekit.HomekitAccessoryUpdater;
 
 public class HomekitAccessoryUpdaterImpl extends AbstractEventSubscriber implements HomekitAccessoryUpdater {
 

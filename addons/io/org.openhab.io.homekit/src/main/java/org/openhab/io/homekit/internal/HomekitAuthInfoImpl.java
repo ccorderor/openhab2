@@ -1,4 +1,4 @@
-package com.beowulfe.openhab.homekit.internal;
+package org.openhab.io.homekit.internal;
 
 import java.math.BigInteger;
 import java.security.InvalidAlgorithmParameterException;
