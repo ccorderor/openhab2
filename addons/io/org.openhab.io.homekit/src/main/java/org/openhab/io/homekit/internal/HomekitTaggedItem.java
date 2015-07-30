@@ -1,50 +1,76 @@
 package org.openhab.io.homekit.internal;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.eclipse.smarthome.core.items.Item;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class HomekitTaggedItem {
 
-	private Integer homekitId;
-	private HomekitDeviceType homekitType;
-	private final Item item;
-	private Logger logger = LoggerFactory
-			.getLogger(HomekitTaggedItem.class);
-	
-	public HomekitTaggedItem(Item item) {
-		this.item = item;
-		for (String tag: item.getTags()) {
-			if (tag.startsWith("homekitId:")) {
-				homekitId = Integer.valueOf(tag.substring("homekitId:".length()));
-			} else if (tag.startsWith("homekitType:")) {
-				String typeString = tag.substring("homekitType:".length());
-				homekitType = HomekitDeviceType.valueOfCaseInsensitive(typeString);
-				if (homekitType == null) {
-					logger.error("Unrecognized homekit type: "+typeString);
-				}
-			}
-		}
-		if ((homekitId != null && homekitType == null) || (homekitType != null && homekitId == null)) {
-			logger.error("homekitId and homekitType must both be specified as tags for item " +
-					item.getName());
-		}
-	}
-	
-	public boolean isTagged() {
-		return homekitId != null && homekitType != null;
-	}
-	
-	public Integer getId() {
-		//1 is reserved for the bridge itself, and two-based array sequences would be strange
-		return homekitId + 1;
-	}
-	
-	public HomekitDeviceType getType() {
-		return homekitType;
-	}
-	
-	public Item getItem() {
-		return item;
-	}
+    private static final Map<Integer, String> CREATED_ACCESSORY_IDS = new ConcurrentHashMap<>();
+
+    private HomekitDeviceType homekitType;
+    private final Item item;
+    private Logger logger = LoggerFactory.getLogger(HomekitTaggedItem.class);
+    private final int id;
+
+    public HomekitTaggedItem(Item item) {
+        this.item = item;
+        for (String tag : item.getTags()) {
+            if (tag.startsWith("homekit:")) {
+                String tagValue = tag.substring("homekit:".length());
+                homekitType = HomekitDeviceType.valueOfTag(tagValue);
+                if (homekitType == null) {
+                    logger.error("Unrecognized homekit type: " + tagValue);
+                }
+            }
+        }
+        if (homekitType != null) {
+            this.id = calculateId(item);
+        } else {
+            this.id = 0;
+        }
+    }
+
+    public boolean isTagged() {
+        return homekitType != null && id != 0;
+    }
+
+    public HomekitDeviceType getType() {
+        return homekitType;
+    }
+
+    public Item getItem() {
+        return item;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    private int calculateId(Item item) {
+        int id = new HashCodeBuilder().append(item.getName()).hashCode();
+        if (id < 0) {
+            id += Integer.MAX_VALUE;
+        }
+        if (id < 2) {
+            id = 2; // 0 and 1 are reserved
+        }
+        if (CREATED_ACCESSORY_IDS.containsKey(id)) {
+            if (!CREATED_ACCESSORY_IDS.get(id).equals(item.getName())) {
+                logger.error("Could not create homekit accessory " + item.getName() + " "
+                        + "because its hash conflicts with " + CREATED_ACCESSORY_IDS.get(id) + ". "
+                        + "This is a 1:1,000,000 chance occurrence. Change one of the names and "
+                        + "consider playing the lottery. See "
+                        + "https://github.com/openhab/openhab2/issues/257#issuecomment-125886562");
+                return 0;
+            }
+        } else {
+            CREATED_ACCESSORY_IDS.put(id, item.getName());
+        }
+        return id;
+    }
 }

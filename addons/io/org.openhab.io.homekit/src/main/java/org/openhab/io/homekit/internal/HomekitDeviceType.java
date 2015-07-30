@@ -5,18 +5,23 @@ import java.util.Map;
 
 public enum HomekitDeviceType {
 
-	LIGHTBULB
-	;
-	
-	private static final Map<String, HomekitDeviceType> lowerCaseMap = new HashMap<>();
-	
-	static {
-		for (HomekitDeviceType type: HomekitDeviceType.values()) {
-			lowerCaseMap.put(type.name().toLowerCase(), type);
-		}
-	}
-	
-	public static HomekitDeviceType valueOfCaseInsensitive(String type) {
-		return lowerCaseMap.get(type.toLowerCase());
-	}
+    LIGHTBULB("Lightbulb");
+
+    private static final Map<String, HomekitDeviceType> tagMap = new HashMap<>();
+
+    static {
+        for (HomekitDeviceType type : HomekitDeviceType.values()) {
+            tagMap.put(type.tag, type);
+        }
+    }
+
+    private final String tag;
+
+    private HomekitDeviceType(String tag) {
+        this.tag = tag;
+    }
+
+    public static HomekitDeviceType valueOfTag(String tag) {
+        return tagMap.get(tag);
+    }
 }
