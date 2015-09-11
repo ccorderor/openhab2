@@ -5,7 +5,8 @@ import java.util.Map;
 
 public enum HomekitDeviceType {
 
-    LIGHTBULB("Lightbulb");
+    LIGHTBULB("Lightbulb"),
+    THERMOSTAT("Thermostat");
 
     private static final Map<String, HomekitDeviceType> tagMap = new HashMap<>();
 

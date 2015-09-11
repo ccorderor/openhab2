@@ -12,7 +12,8 @@ public class HomekitTaggedItem {
 
     private static final Map<Integer, String> CREATED_ACCESSORY_IDS = new ConcurrentHashMap<>();
 
-    private HomekitDeviceType homekitType;
+    private HomekitDeviceType homekitDeviceType;
+    private HomekitCharacteristicType homekitCharacteristicType;
     private final Item item;
     private Logger logger = LoggerFactory.getLogger(HomekitTaggedItem.class);
     private final int id;
@@ -22,13 +23,16 @@ public class HomekitTaggedItem {
         for (String tag : item.getTags()) {
             if (tag.startsWith("homekit:")) {
                 String tagValue = tag.substring("homekit:".length());
-                homekitType = HomekitDeviceType.valueOfTag(tagValue);
-                if (homekitType == null) {
-                    logger.error("Unrecognized homekit type: " + tagValue);
+                homekitDeviceType = HomekitDeviceType.valueOfTag(tagValue);
+                if (homekitDeviceType == null) {
+                    homekitCharacteristicType = HomekitCharacteristicType.valueOfTag(tagValue);
+                    if (homekitCharacteristicType == null) {
+                        logger.error("Unrecognized homekit type: " + tagValue);
+                    }
                 }
             }
         }
-        if (homekitType != null) {
+        if (homekitDeviceType != null) {
             this.id = calculateId(item);
         } else {
             this.id = 0;
@@ -36,11 +40,19 @@ public class HomekitTaggedItem {
     }
 
     public boolean isTagged() {
-        return homekitType != null && id != 0;
+        return (homekitDeviceType != null && id != 0) || homekitCharacteristicType != null;
     }
 
-    public HomekitDeviceType getType() {
-        return homekitType;
+    public HomekitDeviceType getDeviceType() {
+        return homekitDeviceType;
+    }
+
+    public HomekitCharacteristicType getCharacteristicType() {
+        return homekitCharacteristicType;
+    }
+
+    public boolean isRootDevice() {
+        return homekitDeviceType != null;
     }
 
     public Item getItem() {

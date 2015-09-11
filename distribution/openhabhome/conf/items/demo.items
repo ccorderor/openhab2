@@ -18,6 +18,14 @@ Group FF_Child 		"Child's Room" 	<boy1> 		(gFF)
 Group FF_Bed 		"Bedroom" 		<bedroom> 	(gFF)
 Group FF_Corridor 	"Corridor" 		<corridor> 	(gFF)
 
+/* Device - Upstairs Thermostat */
+Group    FF_Thermostat "Upstairs Thermostat" <temperature> (gFF) [ "homekit:Thermostat" ]
+Number   UpstairsThermostatCurrentTemperature "Current Temp [%.1f F]" (FF_Thermostat) [ "homekit:currentTemperature" ]
+Number   UpstairsThermostatCurrentSetpointCool "Cool To [%.1f F]" (FF_Thermostat) [ "homekit:coolingThreshold" ]
+Number   UpstairsThermostatCurrentSetpointHeat "Heat To [%.1f F]" (FF_Thermostat) [ "homekit:heatingThreshold" ]
+String   UpstairsThermostatModeStatus "Mode [%s]" (FF_Thermostat) [ "homekit:heatingCoolingMode" ]
+
+
 /* active groups */
 Group:Switch:OR(ON, OFF) 		Lights 		"All Lights [(%d)]" 								(All)
 Group:Switch:OR(ON, OFF) 		Heating 	"No. of Active Heatings [(%d)]" 	<heating> 		(All)
@@ -26,14 +34,14 @@ Group:Contact:OR(OPEN, CLOSED) 	Windows 	"Open windows [(%d)]"				<contact>		(Al
 
 /* Lights */
 Dimmer Light_GF_Living_Table 		"Table" 		(GF_Living, Lights) 
-Switch Light_GF_Corridor_Ceiling 	"Ceiling" 		(GF_Corridor, Lights) [ "homekit:Lightbulb" ]
+Switch Light_GF_Corridor_Ceiling 	"Ceiling Light 1" (GF_Corridor, Lights) [ "homekit:Lightbulb" ]
 Switch Light_GF_Kitchen_Ceiling 	"Ceiling" 		(GF_Kitchen, Lights)
 Switch Light_GF_Kitchen_Table 		"Table" 		(GF_Kitchen, Lights)
 Switch Light_GF_Corridor_Wardrobe 	"Wardrobe"	 	(GF_Corridor, Lights)
 Switch Light_GF_Toilet_Ceiling 		"Ceiling" 		(GF_Toilet, Lights)
 Switch Light_GF_Toilet_Mirror 		"Mirror" 		(GF_Toilet, Lights)
 
-Switch Light_FF_Bath_Ceiling 		"Ceiling" 		(FF_Bath, Lights) [ "homekit:Lightbulb" ]
+Switch Light_FF_Bath_Ceiling 		"Ceiling Light 2"  (FF_Bath, Lights) [ "homekit:Lightbulb" ]
 Switch Light_FF_Bath_Mirror 		"Mirror" 		(FF_Bath, Lights)
 Switch Light_FF_Corridor_Ceiling 	"Corridor" 		(FF_Corridor, Lights)
 Switch Light_FF_Office_Ceiling 		"Ceiling" 		(FF_Office, Lights)
