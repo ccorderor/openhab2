@@ -5,8 +5,7 @@ import java.util.Collection;
 import org.eclipse.smarthome.core.items.Item;
 import org.eclipse.smarthome.core.items.ItemRegistry;
 import org.eclipse.smarthome.core.items.ItemRegistryChangeListener;
-import org.openhab.io.homekit.internal.accessories.HomekitLightbulbImpl;
-import org.openhab.io.homekit.internal.accessories.HomekitThermostatImpl;
+import org.openhab.io.homekit.internal.accessories.HomekitAccessoryFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,21 +73,12 @@ public class HomekitChangeListener implements ItemRegistryChangeListener {
     }
 
     private void createRootDevice(HomekitTaggedItem taggedItem) {
-
-        switch (taggedItem.getDeviceType()) {
-            case LIGHTBULB:
-                accessoryRegistry.addRootDevice(new HomekitLightbulbImpl(taggedItem, itemRegistry, updater));
-                break;
-
-            case THERMOSTAT:
-                accessoryRegistry.addRootDevice(new HomekitThermostatImpl(taggedItem, itemRegistry, updater, settings));
-                break;
-
-            default:
-                logger.error("Unknown homekit type: " + taggedItem.getDeviceType());
-                return;
+        try {
+            accessoryRegistry
+                    .addRootDevice(HomekitAccessoryFactory.create(taggedItem, itemRegistry, updater, settings));
+        } catch (Exception e) {
+            logger.error("Could not add device: " + e.getMessage(), e);
         }
-
     }
 
     private void createCharacteristic(HomekitTaggedItem taggedItem) {

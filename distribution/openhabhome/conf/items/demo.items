@@ -33,7 +33,7 @@ Group:Number:AVG 				Temperature	"Avg. Room Temperature [%.1f °C]" 	<temperatur
 Group:Contact:OR(OPEN, CLOSED) 	Windows 	"Open windows [(%d)]"				<contact>		(All)
 
 /* Lights */
-Dimmer Light_GF_Living_Table 		"Table" 		(GF_Living, Lights) 
+Dimmer Light_GF_Living_Table 		"Table" 		(GF_Living, Lights) [ "homekit:DimmableLightbulb" ]
 Switch Light_GF_Corridor_Ceiling 	"Ceiling Light 1" (GF_Corridor, Lights) [ "homekit:Lightbulb" ]
 Switch Light_GF_Kitchen_Ceiling 	"Ceiling" 		(GF_Kitchen, Lights)
 Switch Light_GF_Kitchen_Table 		"Table" 		(GF_Kitchen, Lights)

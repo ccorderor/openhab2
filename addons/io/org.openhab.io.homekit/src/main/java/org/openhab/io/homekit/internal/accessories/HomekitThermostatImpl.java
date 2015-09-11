@@ -18,7 +18,7 @@ import com.beowulfe.hap.accessories.Thermostat;
 import com.beowulfe.hap.accessories.properties.TemperatureUnit;
 import com.beowulfe.hap.accessories.properties.ThermostatMode;
 
-public class HomekitThermostatImpl extends AbstractHomekitAccessoryImpl implements Thermostat, GroupedAccessory {
+class HomekitThermostatImpl extends AbstractHomekitAccessoryImpl implements Thermostat, GroupedAccessory {
 
     private final String groupName;
     private final HomekitSettings settings;
