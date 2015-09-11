@@ -7,6 +7,11 @@ import org.openhab.io.homekit.internal.HomekitTaggedItem;
 
 import com.beowulfe.hap.HomekitAccessory;
 
+/**
+ * Creates a HomekitAccessory for a given HomekitTaggedItem.
+ *
+ * @author Andy Lintner
+ */
 public class HomekitAccessoryFactory {
 
     public static HomekitAccessory create(HomekitTaggedItem taggedItem, ItemRegistry itemRegistry,

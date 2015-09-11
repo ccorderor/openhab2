@@ -3,6 +3,12 @@ package org.openhab.io.homekit.internal;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Characteristics are used by complex accessories that can't be represented by
+ * a single item (i.e. a thermostat)
+ *
+ * @author Andy Lintner
+ */
 public enum HomekitCharacteristicType {
 
     CURRENT_TEMPERATURE("currentTemperature"),

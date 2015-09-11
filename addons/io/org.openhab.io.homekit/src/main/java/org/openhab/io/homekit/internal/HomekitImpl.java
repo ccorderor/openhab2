@@ -17,6 +17,11 @@ import org.slf4j.LoggerFactory;
 import com.beowulfe.hap.HomekitRoot;
 import com.beowulfe.hap.HomekitServer;
 
+/**
+ * The managed service for providing access to OpenHAB items via the Homekit API
+ *
+ * @author Andy Lintner
+ */
 public class HomekitImpl implements ManagedService {
 
     private HomekitSettings settings;

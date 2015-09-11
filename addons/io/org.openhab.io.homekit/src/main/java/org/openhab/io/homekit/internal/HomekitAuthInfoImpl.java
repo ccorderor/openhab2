@@ -10,77 +10,83 @@ import org.eclipse.smarthome.core.storage.StorageService;
 import com.beowulfe.hap.HomekitAuthInfo;
 import com.beowulfe.hap.HomekitServer;
 
+/**
+ * Provides a mechanism to store authenticated homekit client details inside the
+ * ESH StorageService, by implementing HomekitAuthInfo.
+ *
+ * @author Andy Lintner
+ */
 public class HomekitAuthInfoImpl implements HomekitAuthInfo {
 
-	private final Storage<String> storage;
-	private final String mac;
-	private final BigInteger salt;
-	private final byte[] privateKey;
-	private final String pin;
-	
-	public HomekitAuthInfoImpl(StorageService storageService, String pin) throws InvalidAlgorithmParameterException {
-		storage = storageService.getStorage("homekit");
-		initializeStorage();
-		this.pin = pin;
-		mac = storage.get("mac");
-		salt = new BigInteger(storage.get("salt"));
-		privateKey = Base64.getDecoder().decode(storage.get("privateKey"));
-	}
-	
-	@Override
-	public void createUser(String username, byte[] publicKey) {
-		storage.put(createUserKey(username), Base64.getEncoder().encodeToString(publicKey));
-	}
+    private final Storage<String> storage;
+    private final String mac;
+    private final BigInteger salt;
+    private final byte[] privateKey;
+    private final String pin;
 
-	@Override
-	public String getMac() {
-		return mac;
-	}
+    public HomekitAuthInfoImpl(StorageService storageService, String pin) throws InvalidAlgorithmParameterException {
+        storage = storageService.getStorage("homekit");
+        initializeStorage();
+        this.pin = pin;
+        mac = storage.get("mac");
+        salt = new BigInteger(storage.get("salt"));
+        privateKey = Base64.getDecoder().decode(storage.get("privateKey"));
+    }
 
-	@Override
-	public String getPin() {
-		return pin;
-	}
+    @Override
+    public void createUser(String username, byte[] publicKey) {
+        storage.put(createUserKey(username), Base64.getEncoder().encodeToString(publicKey));
+    }
 
-	@Override
-	public byte[] getPrivateKey() {
-		return privateKey;
-	}
+    @Override
+    public String getMac() {
+        return mac;
+    }
 
-	@Override
-	public BigInteger getSalt() {
-		return salt;
-	}
+    @Override
+    public String getPin() {
+        return pin;
+    }
 
-	@Override
-	public byte[] getUserPublicKey(String username) {
-		String encodedKey = storage.get(createUserKey(username));
-		if (encodedKey != null) {
-			return Base64.getDecoder().decode(encodedKey);
-		} else {
-			return null;
-		}
-	}
+    @Override
+    public byte[] getPrivateKey() {
+        return privateKey;
+    }
 
-	@Override
-	public void removeUser(String username) {
-		storage.remove(createUserKey(username));
-	}
-	
-	private String createUserKey(String username) {
-		return "user_"+username;
-	}
-	
-	private void initializeStorage() throws InvalidAlgorithmParameterException {
-		if (storage.get("mac") == null) {
-			storage.put("mac", HomekitServer.generateMac());
-		}
-		if (storage.get("salt") == null) {
-			storage.put("salt", HomekitServer.generateSalt().toString());
-		}
-		if (storage.get("privateKey") == null) {
-			storage.put("privateKey", Base64.getEncoder().encodeToString(HomekitServer.generateKey()));
-		}
-	}
+    @Override
+    public BigInteger getSalt() {
+        return salt;
+    }
+
+    @Override
+    public byte[] getUserPublicKey(String username) {
+        String encodedKey = storage.get(createUserKey(username));
+        if (encodedKey != null) {
+            return Base64.getDecoder().decode(encodedKey);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public void removeUser(String username) {
+        storage.remove(createUserKey(username));
+    }
+
+    private String createUserKey(String username) {
+        return "user_" + username;
+    }
+
+    private void initializeStorage() throws InvalidAlgorithmParameterException {
+        if (storage.get("mac") == null) {
+            storage.put("mac", HomekitServer.generateMac());
+        }
+        if (storage.get("salt") == null) {
+            storage.put("salt", HomekitServer.generateSalt().toString());
+        }
+        if (storage.get("privateKey") == null) {
+            storage.put("privateKey", Base64.getEncoder().encodeToString(HomekitServer.generateKey()));
+        }
+    }
 
 }

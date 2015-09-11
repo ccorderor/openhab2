@@ -8,6 +8,11 @@ import org.eclipse.smarthome.core.items.Item;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Wraps an Item with data derived from any homekit: tags defined.
+ *
+ * @author Andy Lintner
+ */
 public class HomekitTaggedItem {
 
     private static final Map<Integer, String> CREATED_ACCESSORY_IDS = new ConcurrentHashMap<>();

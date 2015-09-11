@@ -3,6 +3,12 @@ package org.openhab.io.homekit.internal;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Enum of the possible device types. The defined tag string can be used
+ * as a homekit:{tag} tag on an item to enable it for Homekit.
+ *
+ * @author Andy Lintner
+ */
 public enum HomekitDeviceType {
 
     LIGHTBULB("Lightbulb"),

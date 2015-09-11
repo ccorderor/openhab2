@@ -18,6 +18,18 @@ import com.beowulfe.hap.accessories.Thermostat;
 import com.beowulfe.hap.accessories.properties.TemperatureUnit;
 import com.beowulfe.hap.accessories.properties.ThermostatMode;
 
+/**
+ * Implements Thermostat as a GroupedAccessory made up of multiple items:
+ * <ul>
+ * <li>Cooling Threshold: Decimal type</li>
+ * <li>Heating Threshold: Decimal type</li>
+ * <li>Auto Threshold: Decimal type</li>
+ * <li>Current Temperature: Decimal type</li>
+ * <li>Heating/Cooling Mode: String type (see HomekitSettings.thermostat*Mode)</li>
+ * </ul>
+ * 
+ * @author Andy Lintner
+ */
 class HomekitThermostatImpl extends AbstractHomekitAccessoryImpl implements Thermostat, GroupedAccessory {
 
     private final String groupName;

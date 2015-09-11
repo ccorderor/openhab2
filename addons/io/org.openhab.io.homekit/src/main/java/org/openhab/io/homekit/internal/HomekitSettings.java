@@ -4,6 +4,11 @@ import java.util.Dictionary;
 
 import org.osgi.framework.FrameworkUtil;
 
+/**
+ * Provides the configured and static settings for the Homekit addon
+ *
+ * @author Andy Lintner
+ */
 public class HomekitSettings {
 
     private final static String NAME = "OpenHAB Homekit Bridge";

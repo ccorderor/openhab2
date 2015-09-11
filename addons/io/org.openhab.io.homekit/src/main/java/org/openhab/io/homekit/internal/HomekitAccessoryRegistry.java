@@ -15,6 +15,12 @@ import org.slf4j.LoggerFactory;
 import com.beowulfe.hap.HomekitAccessory;
 import com.beowulfe.hap.HomekitRoot;
 
+/**
+ * Stores the created HomekitAccessories. GroupedAccessories are also held here
+ * in a pre-created pending state until all required characteristics are found.
+ *
+ * @author Andy Lintner
+ */
 class HomekitAccessoryRegistry {
 
     private HomekitRoot bridge;

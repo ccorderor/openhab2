@@ -12,6 +12,14 @@ import org.slf4j.LoggerFactory;
 
 import com.beowulfe.hap.HomekitCharacteristicChangeCallback;
 
+/**
+ * Subscribes and unsubscribes from Item changes to enable notification to Homekit
+ * clients. Each item/key pair (key is optional) should be unique, as the underlying
+ * Homekit library takes care of insuring only a single subscription exists for
+ * each accessory.
+ *
+ * @author Andy Lintner
+ */
 public class HomekitAccessoryUpdater {
 
     private Logger logger = LoggerFactory.getLogger(HomekitAccessoryUpdater.class);

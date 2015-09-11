@@ -6,6 +6,12 @@ import org.openhab.io.homekit.internal.HomekitTaggedItem;
 
 import com.beowulfe.hap.HomekitAccessory;
 
+/**
+ * Abstract class for HomekitAccessory implementations, this provides the
+ * accessory metadata using information from the underlying Item.
+ *
+ * @author Andy Lintner
+ */
 abstract class AbstractHomekitAccessoryImpl implements HomekitAccessory {
 
     private final int accessoryId;

@@ -12,6 +12,11 @@ import org.slf4j.LoggerFactory;
 import com.beowulfe.hap.HomekitCharacteristicChangeCallback;
 import com.beowulfe.hap.accessories.DimmableLightbulb;
 
+/**
+ * Implements DimmableLightBulb using an Item that provides a On/Off and Percent state.
+ *
+ * @author Andy Lintner
+ */
 class HomekitDimmableLightbulbImpl extends HomekitLightbulbImpl implements DimmableLightbulb {
 
     private Logger logger = LoggerFactory.getLogger(HomekitDimmableLightbulbImpl.class);

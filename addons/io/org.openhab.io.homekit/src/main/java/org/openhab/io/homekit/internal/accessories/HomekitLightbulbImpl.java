@@ -13,6 +13,11 @@ import org.slf4j.LoggerFactory;
 import com.beowulfe.hap.HomekitCharacteristicChangeCallback;
 import com.beowulfe.hap.accessories.Lightbulb;
 
+/**
+ * Implements Lightbulb using an Item that provides an On/Off state
+ *
+ * @author Andy Lintner
+ */
 class HomekitLightbulbImpl extends AbstractHomekitAccessoryImpl implements Lightbulb {
 
     private Logger logger = LoggerFactory.getLogger(HomekitLightbulbImpl.class);
