@@ -26,6 +26,9 @@ public class HomekitAccessoryFactory {
             case THERMOSTAT:
                 return new HomekitThermostatImpl(taggedItem, itemRegistry, updater, settings);
 
+            case SWITCH:
+                return new HomekitSwitchImpl(taggedItem, itemRegistry, updater);
+
             default:
                 throw new Exception("Unknown homekit type: " + taggedItem.getDeviceType());
         }

@@ -1,5 +1,6 @@
 package org.openhab.io.homekit.internal.accessories;
 
+import org.eclipse.smarthome.core.items.GenericItem;
 import org.eclipse.smarthome.core.items.ItemRegistry;
 import org.openhab.io.homekit.internal.HomekitAccessoryUpdater;
 import org.openhab.io.homekit.internal.HomekitTaggedItem;
@@ -69,5 +70,9 @@ abstract class AbstractHomekitAccessoryImpl implements HomekitAccessory {
 
     protected HomekitAccessoryUpdater getUpdater() {
         return updater;
+    }
+
+    protected GenericItem getItem() {
+        return (GenericItem) getItemRegistry().get(getItemName());
     }
 }
