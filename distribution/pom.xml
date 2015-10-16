@@ -409,5 +409,20 @@
             </snapshots>
         </repository>
     </repositories>
+    
+    <profiles>
+      <profile>
+        <activation>
+          <jdk>[1.8,)</jdk>
+        </activation>
+        <dependencies>
+          <dependency>
+            <groupId>org.openhab.io</groupId>
+            <artifactId>org.openhab.io.homekit</artifactId>
+            <version>${project.version}</version>
+          </dependency>
+        </dependencies>
+      </profile>
+    </profiles>
 
 </project>
