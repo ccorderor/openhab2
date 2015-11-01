@@ -1,6 +1,7 @@
 package org.openhab.io.homekit.internal;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.security.InvalidAlgorithmParameterException;
 import java.util.Dictionary;
 
@@ -55,7 +56,12 @@ public class HomekitImpl implements ManagedService {
 
     @Override
     public void updated(Dictionary<String, ?> properties) throws ConfigurationException {
-        HomekitSettings newSettings = HomekitSettings.create(properties);
+        HomekitSettings newSettings;
+        try {
+            newSettings = HomekitSettings.create(properties);
+        } catch (UnknownHostException e) {
+            throw new ConfigurationException("networkInterface", e.getMessage(), e);
+        }
         homekitRegistry.setSettings(newSettings);
         if (settings != null) {
             if (!settings.equals(newSettings)) {
@@ -73,7 +79,7 @@ public class HomekitImpl implements ManagedService {
     }
 
     private void start() throws IOException, InvalidAlgorithmParameterException {
-        homekit = new HomekitServer(settings.getPort());
+        homekit = new HomekitServer(settings.getNetworkInterface(), settings.getPort());
         bridge = homekit.createBridge(new HomekitAuthInfoImpl(storageService, settings.getPin()), settings.getName(),
                 settings.getManufacturer(), settings.getModel(), settings.getSerialNumber());
         bridge.start();

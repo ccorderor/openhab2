@@ -1,5 +1,7 @@
 package org.openhab.io.homekit.internal;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Dictionary;
 
 import org.osgi.framework.FrameworkUtil;
@@ -24,8 +26,9 @@ public class HomekitSettings {
     private String thermostatCoolMode;
     private String thermostatAutoMode;
     private String thermostatOffMode;
+    private InetAddress networkInterface;
 
-    public static HomekitSettings create(Dictionary<String, ?> properties) {
+    public static HomekitSettings create(Dictionary<String, ?> properties) throws UnknownHostException {
         HomekitSettings settings = new HomekitSettings();
         String portString = (String) properties.get("port");
         if (portString == null) {
@@ -50,6 +53,13 @@ public class HomekitSettings {
         settings.thermostatCoolMode = (String) properties.get("thermostatCoolMode");
         settings.thermostatAutoMode = (String) properties.get("thermostatAutoMode");
         settings.thermostatOffMode = (String) properties.get("thermostatOffMode");
+
+        String networkInterface = (String) properties.get("networkInterface");
+        if (networkInterface == null) {
+            settings.networkInterface = InetAddress.getLocalHost();
+        } else {
+            settings.networkInterface = InetAddress.getByName(networkInterface);
+        }
         return settings;
     }
 
@@ -67,6 +77,10 @@ public class HomekitSettings {
 
     public String getModel() {
         return FrameworkUtil.getBundle(getClass()).getVersion().toString();
+    }
+
+    public InetAddress getNetworkInterface() {
+        return networkInterface;
     }
 
     public int getPort() {
