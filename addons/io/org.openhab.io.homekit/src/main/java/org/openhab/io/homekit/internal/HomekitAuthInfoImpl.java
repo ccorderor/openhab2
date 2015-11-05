@@ -3,9 +3,13 @@ package org.openhab.io.homekit.internal;
 import java.math.BigInteger;
 import java.security.InvalidAlgorithmParameterException;
 import java.util.Base64;
+import java.util.Collection;
+import java.util.HashSet;
 
 import org.eclipse.smarthome.core.storage.Storage;
 import org.eclipse.smarthome.core.storage.StorageService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.beowulfe.hap.HomekitAuthInfo;
 import com.beowulfe.hap.HomekitServer;
@@ -23,6 +27,7 @@ public class HomekitAuthInfoImpl implements HomekitAuthInfo {
     private final BigInteger salt;
     private final byte[] privateKey;
     private final String pin;
+    private Logger logger = LoggerFactory.getLogger(HomekitImpl.class);
 
     public HomekitAuthInfoImpl(StorageService storageService, String pin) throws InvalidAlgorithmParameterException {
         storage = storageService.getStorage("homekit");
@@ -73,12 +78,32 @@ public class HomekitAuthInfoImpl implements HomekitAuthInfo {
         storage.remove(createUserKey(username));
     }
 
+    @Override
+    public boolean hasUser() {
+        Collection<String> keys = storage.getKeys();
+        return keys.stream().filter(k -> isUserKey(k)).count() > 0;
+    }
+
+    public void clear() {
+        for (String key : new HashSet<>(storage.getKeys())) {
+            if (isUserKey("user_")) {
+                storage.remove(key);
+            }
+        }
+    }
+
     private String createUserKey(String username) {
         return "user_" + username;
     }
 
+    private boolean isUserKey(String key) {
+        return key.startsWith("user_");
+    }
+
     private void initializeStorage() throws InvalidAlgorithmParameterException {
         if (storage.get("mac") == null) {
+            logger.warn("Could not find existing MAC in " + storage.getClass().getName()
+                    + ". Generating new MAC. This will require re-pairing of iOS devices.");
             storage.put("mac", HomekitServer.generateMac());
         }
         if (storage.get("salt") == null) {

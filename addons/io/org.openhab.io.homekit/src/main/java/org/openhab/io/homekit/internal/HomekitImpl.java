@@ -7,6 +7,7 @@ import java.util.Dictionary;
 
 import org.eclipse.smarthome.core.items.ItemRegistry;
 import org.eclipse.smarthome.core.storage.StorageService;
+import org.openhab.io.homekit.Homekit;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 import org.osgi.service.component.ComponentContext;
@@ -23,7 +24,7 @@ import com.beowulfe.hap.HomekitServer;
  *
  * @author Andy Lintner
  */
-public class HomekitImpl implements ManagedService {
+public class HomekitImpl implements ManagedService, Homekit {
 
     private HomekitSettings settings;
     private HomekitServer homekit;
@@ -31,17 +32,19 @@ public class HomekitImpl implements ManagedService {
     private StorageService storageService;
     private final HomekitChangeListener homekitRegistry = new HomekitChangeListener();
     private Logger logger = LoggerFactory.getLogger(HomekitImpl.class);
+    private ItemRegistry itemRegistry;
 
     public void setStorageService(StorageService storageService) {
         this.storageService = storageService;
     }
 
     public void setItemRegistry(ItemRegistry itemRegistry) {
-        homekitRegistry.setItemRegistry(itemRegistry);
+        this.itemRegistry = itemRegistry;
     }
 
     @Activate
     protected synchronized void activate(ComponentContext componentContext) {
+
     }
 
     @Deactivate
@@ -71,10 +74,25 @@ public class HomekitImpl implements ManagedService {
         settings = newSettings;
         if (homekit == null) {
             try {
+                homekitRegistry.setItemRegistry(itemRegistry);
                 start();
             } catch (Exception e) {
                 logger.error("Could not initialize homekit: " + e.getMessage(), e);
             }
+        }
+    }
+
+    @Override
+    public void refreshAuthInfo() throws IOException {
+        if (bridge != null) {
+            bridge.refreshAuthInfo();
+        }
+    }
+
+    @Override
+    public void allowUnauthenticatedRequests(boolean allow) {
+        if (bridge != null) {
+            bridge.allowUnauthenticatedRequests(allow);
         }
     }
 

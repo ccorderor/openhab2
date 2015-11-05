@@ -14,7 +14,7 @@ import com.beowulfe.hap.HomekitRoot;
 /**
  * Listens for changes to the item registry. When changes are detected, check
  * for Homekit tags and, if present, add the items to the HomekitAccessoryRegistry.
- * 
+ *
  * @author Andy Lintner
  */
 public class HomekitChangeListener implements ItemRegistryChangeListener {
@@ -80,14 +80,17 @@ public class HomekitChangeListener implements ItemRegistryChangeListener {
 
     private void createRootDevice(HomekitTaggedItem taggedItem) {
         try {
+            logger.info("Adding homekit device " + taggedItem.getItem().getName());
             accessoryRegistry
                     .addRootDevice(HomekitAccessoryFactory.create(taggedItem, itemRegistry, updater, settings));
+            logger.info("Added homekit device " + taggedItem.getItem().getName());
         } catch (Exception e) {
             logger.error("Could not add device: " + e.getMessage(), e);
         }
     }
 
     private void createCharacteristic(HomekitTaggedItem taggedItem) {
+        logger.info("Adding grouped homekit characteristic " + taggedItem.getItem().getName());
         accessoryRegistry.addCharacteristic(taggedItem);
     }
 }

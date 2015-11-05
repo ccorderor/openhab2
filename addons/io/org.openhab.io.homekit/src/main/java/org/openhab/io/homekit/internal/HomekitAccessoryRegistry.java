@@ -73,10 +73,12 @@ class HomekitAccessoryRegistry {
         for (String group : item.getItem().getGroupNames()) {
             if (pendingGroupedAccessories.containsKey(group)) {
                 addCharacteristicToGroup(group, item);
+                logger.info("Added " + item.getItem().getName() + " to " + group);
                 return;
             }
         }
         pendingCharacteristics.add(item);
+        logger.info("Stored " + item.getItem().getName() + " until group is ready");
     }
 
     private void addCharacteristicToGroup(String group, HomekitTaggedItem item) {
