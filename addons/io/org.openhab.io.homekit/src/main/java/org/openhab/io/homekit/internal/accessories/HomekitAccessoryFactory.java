@@ -29,8 +29,13 @@ public class HomekitAccessoryFactory {
             case SWITCH:
                 return new HomekitSwitchImpl(taggedItem, itemRegistry, updater);
 
-            default:
-                throw new Exception("Unknown homekit type: " + taggedItem.getDeviceType());
+            case TEMPERATURE_SENSOR:
+                return new HomekitTemperatureSensorImpl(taggedItem, itemRegistry, updater, settings);
+
+            case HUMIDITY_SENSOR:
+                return new HomekitHumiditySensorImpl(taggedItem, itemRegistry, updater);
         }
+
+        throw new Exception("Unknown homekit type: " + taggedItem.getDeviceType());
     }
 }

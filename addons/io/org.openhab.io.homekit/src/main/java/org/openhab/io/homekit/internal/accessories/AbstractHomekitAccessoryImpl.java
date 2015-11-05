@@ -4,6 +4,8 @@ import org.eclipse.smarthome.core.items.GenericItem;
 import org.eclipse.smarthome.core.items.ItemRegistry;
 import org.openhab.io.homekit.internal.HomekitAccessoryUpdater;
 import org.openhab.io.homekit.internal.HomekitTaggedItem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.beowulfe.hap.HomekitAccessory;
 
@@ -13,7 +15,7 @@ import com.beowulfe.hap.HomekitAccessory;
  *
  * @author Andy Lintner
  */
-abstract class AbstractHomekitAccessoryImpl implements HomekitAccessory {
+abstract class AbstractHomekitAccessoryImpl<T extends GenericItem> implements HomekitAccessory {
 
     private final int accessoryId;
     private final String itemName;
@@ -21,13 +23,19 @@ abstract class AbstractHomekitAccessoryImpl implements HomekitAccessory {
     private final ItemRegistry itemRegistry;
     private final HomekitAccessoryUpdater updater;
 
+    private Logger logger = LoggerFactory.getLogger(HomekitThermostatImpl.class);
+
     public AbstractHomekitAccessoryImpl(HomekitTaggedItem taggedItem, ItemRegistry itemRegistry,
-            HomekitAccessoryUpdater updater) {
+            HomekitAccessoryUpdater updater, Class<T> expectedItemClass) {
         this.accessoryId = taggedItem.getId();
         this.itemName = taggedItem.getItem().getName();
         this.itemLabel = taggedItem.getItem().getLabel();
         this.itemRegistry = itemRegistry;
         this.updater = updater;
+        if (expectedItemClass.isAssignableFrom(taggedItem.getItem().getClass())) {
+            logger.error("Type " + taggedItem.getItem().getName() + " is a " + taggedItem.getItem().getClass().getName()
+                    + " instead of the expected " + expectedItemClass.getName());
+        }
     }
 
     @Override
@@ -72,7 +80,8 @@ abstract class AbstractHomekitAccessoryImpl implements HomekitAccessory {
         return updater;
     }
 
-    protected GenericItem getItem() {
-        return (GenericItem) getItemRegistry().get(getItemName());
+    @SuppressWarnings("unchecked")
+    protected T getItem() {
+        return (T) getItemRegistry().get(getItemName());
     }
 }

@@ -9,38 +9,40 @@ import org.openhab.io.homekit.internal.HomekitAccessoryUpdater;
 import org.openhab.io.homekit.internal.HomekitTaggedItem;
 
 import com.beowulfe.hap.HomekitCharacteristicChangeCallback;
-import com.beowulfe.hap.accessories.Switch;
+import com.beowulfe.hap.accessories.Lightbulb;
 
 /**
- * Implements Switch using an Item that provides an On/Off state.
+ * Abstract class implementing a Homekit Lightbulb using a SwitchItem
  *
  * @author Andy Lintner
  */
-public class HomekitSwitchImpl extends AbstractHomekitAccessoryImpl<SwitchItem>implements Switch {
+abstract class AbstractHomekitLightbulbImpl<T extends SwitchItem> extends AbstractHomekitAccessoryImpl<T>
+        implements Lightbulb {
 
-    public HomekitSwitchImpl(HomekitTaggedItem taggedItem, ItemRegistry itemRegistry, HomekitAccessoryUpdater updater) {
-        super(taggedItem, itemRegistry, updater, SwitchItem.class);
+    public AbstractHomekitLightbulbImpl(HomekitTaggedItem taggedItem, ItemRegistry itemRegistry,
+            HomekitAccessoryUpdater updater, Class<T> expectedItemClass) {
+        super(taggedItem, itemRegistry, updater, expectedItemClass);
     }
 
     @Override
-    public CompletableFuture<Boolean> getSwitchState() {
+    public CompletableFuture<Boolean> getLightbulbPowerState() {
         OnOffType state = (OnOffType) getItem().getStateAs(OnOffType.class);
         return CompletableFuture.completedFuture(state == OnOffType.ON);
     }
 
     @Override
-    public CompletableFuture<Void> setSwitchState(boolean state) throws Exception {
-        getItem().send(state ? OnOffType.ON : OnOffType.OFF);
+    public CompletableFuture<Void> setLightbulbPowerState(boolean value) throws Exception {
+        getItem().send(value ? OnOffType.ON : OnOffType.OFF);
         return CompletableFuture.completedFuture(null);
     }
 
     @Override
-    public void subscribeSwitchState(HomekitCharacteristicChangeCallback callback) {
+    public void subscribeLightbulbPowerState(HomekitCharacteristicChangeCallback callback) {
         getUpdater().subscribe(getItem(), callback);
     }
 
     @Override
-    public void unsubscribeSwitchState() {
+    public void unsubscribeLightbulbPowerState() {
         getUpdater().unsubscribe(getItem());
     }
 

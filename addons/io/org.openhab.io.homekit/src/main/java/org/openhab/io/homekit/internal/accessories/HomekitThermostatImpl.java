@@ -3,8 +3,11 @@ package org.openhab.io.homekit.internal.accessories;
 import java.util.concurrent.CompletableFuture;
 
 import org.eclipse.smarthome.core.items.GenericItem;
+import org.eclipse.smarthome.core.items.GroupItem;
 import org.eclipse.smarthome.core.items.Item;
 import org.eclipse.smarthome.core.items.ItemRegistry;
+import org.eclipse.smarthome.core.library.items.NumberItem;
+import org.eclipse.smarthome.core.library.items.StringItem;
 import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.StringType;
 import org.openhab.io.homekit.internal.HomekitAccessoryUpdater;
@@ -27,10 +30,11 @@ import com.beowulfe.hap.accessories.properties.ThermostatMode;
  * <li>Current Temperature: Decimal type</li>
  * <li>Heating/Cooling Mode: String type (see HomekitSettings.thermostat*Mode)</li>
  * </ul>
- * 
+ *
  * @author Andy Lintner
  */
-class HomekitThermostatImpl extends AbstractHomekitAccessoryImpl implements Thermostat, GroupedAccessory {
+class HomekitThermostatImpl extends AbstractTemperatureHomekitAccessoryImpl<GroupItem>
+        implements Thermostat, GroupedAccessory {
 
     private final String groupName;
     private final HomekitSettings settings;
@@ -44,7 +48,7 @@ class HomekitThermostatImpl extends AbstractHomekitAccessoryImpl implements Ther
 
     public HomekitThermostatImpl(HomekitTaggedItem taggedItem, ItemRegistry itemRegistry,
             HomekitAccessoryUpdater updater, HomekitSettings settings) {
-        super(taggedItem, itemRegistry, updater);
+        super(taggedItem, itemRegistry, updater, settings, GroupItem.class);
         this.groupName = taggedItem.getItem().getName();
         this.settings = settings;
     }
@@ -149,16 +153,6 @@ class HomekitThermostatImpl extends AbstractHomekitAccessoryImpl implements Ther
     }
 
     @Override
-    public double getMaximumTemperature() {
-        return settings.getMaximumTemperature();
-    }
-
-    @Override
-    public double getMinimumTemperature() {
-        return settings.getMinimumTemperature();
-    }
-
-    @Override
     public CompletableFuture<ThermostatMode> getTargetMode() {
         return getCurrentMode();
     }
@@ -184,12 +178,14 @@ class HomekitThermostatImpl extends AbstractHomekitAccessoryImpl implements Ther
 
     @Override
     public void setCoolingThresholdTemperature(Double value) throws Exception {
-        getGenericItem(coolingThresholdItemName).setState(new DecimalType(convertFromCelsius(value)));
+        NumberItem item = getGenericItem(coolingThresholdItemName);
+        item.setState(new DecimalType(convertFromCelsius(value)));
     }
 
     @Override
     public void setHeatingThresholdTemperature(Double value) throws Exception {
-        getGenericItem(heatingThresholdItemName).setState(new DecimalType(convertFromCelsius(value)));
+        NumberItem item = getGenericItem(heatingThresholdItemName);
+        item.setState(new DecimalType(convertFromCelsius(value)));
     }
 
     @Override
@@ -212,12 +208,14 @@ class HomekitThermostatImpl extends AbstractHomekitAccessoryImpl implements Ther
                 modeString = settings.getThermostatOffMode();
                 break;
         }
-        getGenericItem(heatingCoolingModeItemName).setState(new StringType(modeString));
+        StringItem item = getGenericItem(heatingCoolingModeItemName);
+        item.setState(new StringType(modeString));
     }
 
     @Override
     public void setTargetTemperature(Double value) throws Exception {
-        getGenericItem(autoThresholdItemName).setState(new DecimalType(convertFromCelsius(value)));
+        NumberItem item = getGenericItem(autoThresholdItemName);
+        item.setState(new DecimalType(convertFromCelsius(value)));
     }
 
     @Override
@@ -280,7 +278,8 @@ class HomekitThermostatImpl extends AbstractHomekitAccessoryImpl implements Ther
         getUpdater().unsubscribe(getGenericItem(autoThresholdItemName));
     }
 
-    private GenericItem getGenericItem(String name) {
+    @SuppressWarnings("unchecked")
+    private <T extends GenericItem> T getGenericItem(String name) {
         Item item = getItemRegistry().get(name);
         if (item == null) {
             return null;
@@ -288,23 +287,7 @@ class HomekitThermostatImpl extends AbstractHomekitAccessoryImpl implements Ther
         if (!(item instanceof GenericItem)) {
             throw new RuntimeException("Expected GenericItem, found " + item.getClass().getCanonicalName());
         }
-        return (GenericItem) item;
-    }
-
-    private double convertToCelsius(double degrees) {
-        if (settings.useFahrenheitTemperature()) {
-            return Math.round((5d / 9d) * (degrees - 32d) * 1000d) / 1000d;
-        } else {
-            return degrees;
-        }
-    }
-
-    private double convertFromCelsius(double degrees) {
-        if (settings.useFahrenheitTemperature()) {
-            return Math.round((((9d / 5d) * degrees) + 32d) * 1000d) / 1000d;
-        } else {
-            return degrees;
-        }
+        return (T) item;
     }
 
 }

@@ -11,10 +11,12 @@ import java.util.Map;
  */
 public enum HomekitDeviceType {
 
-    LIGHTBULB("Lightbulb"),
     DIMMABLE_LIGHTBULB("DimmableLightbulb"),
-    THERMOSTAT("Thermostat"),
-    SWITCH("Switch");
+    HUMIDITY_SENSOR("HumiditySensor"),
+    LIGHTBULB("Lightbulb"),
+    SWITCH("Switch"),
+    TEMPERATURE_SENSOR("TemperatureSensor"),
+    THERMOSTAT("Thermostat");
 
     private static final Map<String, HomekitDeviceType> tagMap = new HashMap<>();
 

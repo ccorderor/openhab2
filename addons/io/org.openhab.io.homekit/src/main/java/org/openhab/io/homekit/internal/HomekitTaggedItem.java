@@ -27,7 +27,7 @@ public class HomekitTaggedItem {
         this.item = item;
         for (String tag : item.getTags()) {
             if (tag.startsWith("homekit:")) {
-                String tagValue = tag.substring("homekit:".length());
+                String tagValue = tag.substring("homekit:".length()).trim();
                 homekitDeviceType = HomekitDeviceType.valueOfTag(tagValue);
                 if (homekitDeviceType == null) {
                     homekitCharacteristicType = HomekitCharacteristicType.valueOfTag(tagValue);
