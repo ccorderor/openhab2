@@ -14,6 +14,7 @@
 	<reference bind="setItemRegistry" cardinality="1..1" interface="org.eclipse.smarthome.core.items.ItemRegistry" name="ItemRegistry" policy="static"/>
 	<service>
 		<provide interface="org.osgi.service.cm.ManagedService" />
+		<provide interface="org.openhab.io.homekit.Homekit" />
 	</service>
 	
 	<property name="service.pid" type="String" value="org.openhab.homekit" />
