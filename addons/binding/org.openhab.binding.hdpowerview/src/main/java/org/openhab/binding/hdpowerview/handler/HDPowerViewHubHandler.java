@@ -24,8 +24,11 @@ import org.eclipse.smarthome.core.thing.binding.BaseBridgeHandler;
 import org.eclipse.smarthome.core.types.Command;
 import org.openhab.binding.hdpowerview.HDPowerViewBindingConstants;
 import org.openhab.binding.hdpowerview.config.HDPowerViewHubConfiguration;
+import org.openhab.binding.hdpowerview.config.HDPowerViewSceneConfiguration;
 import org.openhab.binding.hdpowerview.config.HDPowerViewShadeConfiguration;
 import org.openhab.binding.hdpowerview.internal.HDPowerViewWebTargets;
+import org.openhab.binding.hdpowerview.internal.api.responses.Scenes;
+import org.openhab.binding.hdpowerview.internal.api.responses.Scenes.Scene;
 import org.openhab.binding.hdpowerview.internal.api.responses.Shades;
 import org.openhab.binding.hdpowerview.internal.api.responses.Shades.Shade;
 import org.slf4j.Logger;
@@ -111,6 +114,19 @@ public class HDPowerViewHubHandler extends BaseBridgeHandler {
                 }
                 updateStatus(ThingStatus.ONLINE);
             }
+            Scenes scenes = webTargets.getScenes();
+            if (scenes != null) {
+                Map<Integer, Thing> things = getThingsBySceneId();
+                for (Scene scene : scenes.sceneData) {
+                    Thing thing = things.get(scene.id);
+                    if (thing != null) {
+                        HDPowerViewSceneHandler handler = ((HDPowerViewSceneHandler) thing.getHandler());
+                        if (handler != null) {
+                            handler.setOnline();
+                        }
+                    }
+                }
+            }
         } catch (Exception e) {
             logger.warn("Could not connect to bridge", e);
             updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE, e.getMessage());
@@ -123,6 +139,17 @@ public class HDPowerViewHubHandler extends BaseBridgeHandler {
         for (Thing thing : getThing().getThings()) {
             if (thing.getThingTypeUID().equals(HDPowerViewBindingConstants.THING_TYPE_SHADE)) {
                 Integer id = thing.getConfiguration().as(HDPowerViewShadeConfiguration.class).id;
+                ret.put(id, thing);
+            }
+        }
+        return ret;
+    }
+
+    private Map<Integer, Thing> getThingsBySceneId() {
+        Map<Integer, Thing> ret = new HashMap<>();
+        for (Thing thing : getThing().getThings()) {
+            if (thing.getThingTypeUID().equals(HDPowerViewBindingConstants.THING_TYPE_SCENE)) {
+                Integer id = thing.getConfiguration().as(HDPowerViewSceneConfiguration.class).id;
                 ret.put(id, thing);
             }
         }

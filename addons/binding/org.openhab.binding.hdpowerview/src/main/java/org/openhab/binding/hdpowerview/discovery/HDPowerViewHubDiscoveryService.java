@@ -8,14 +8,15 @@ import org.eclipse.smarthome.config.discovery.DiscoveryResultBuilder;
 import org.eclipse.smarthome.core.thing.ThingUID;
 import org.openhab.binding.hdpowerview.HDPowerViewBindingConstants;
 import org.openhab.binding.hdpowerview.config.HDPowerViewHubConfiguration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import jcifs.netbios.NbtAddress;
 
+/**
+ * Discovers the HD Power View HUB by searching for a host advertised with the NetBIOS name PDBU-Hub3.0
+ *
+ * @author Andy Lintner
+ */
 public class HDPowerViewHubDiscoveryService extends AbstractDiscoveryService {
-
-    private final Logger logger = LoggerFactory.getLogger(HDPowerViewHubDiscoveryService.class);
 
     public HDPowerViewHubDiscoveryService() {
         super(HDPowerViewBindingConstants.SUPPORTED_THING_TYPES_UIDS, 600, true);

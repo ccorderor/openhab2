@@ -5,10 +5,16 @@ import java.util.concurrent.TimeUnit;
 import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
+import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.types.Command;
 import org.openhab.binding.hdpowerview.HDPowerViewBindingConstants;
 import org.openhab.binding.hdpowerview.config.HDPowerViewSceneConfiguration;
 
+/**
+ * Handles commands for an HD Power View Scene
+ *
+ * @author Andy Lintner
+ */
 public class HDPowerViewSceneHandler extends AbstractHubbedThingHandler {
 
     public HDPowerViewSceneHandler(Thing thing) {
@@ -37,6 +43,10 @@ public class HDPowerViewSceneHandler extends AbstractHubbedThingHandler {
                 }
             }
         }
+    }
+
+    public void setOnline() {
+        updateStatus(ThingStatus.ONLINE);
     }
 
     private int getSceneId() {

@@ -8,6 +8,7 @@ import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.library.types.PercentType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
+import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.UnDefType;
 import org.openhab.binding.hdpowerview.HDPowerViewBindingConstants;
@@ -15,6 +16,11 @@ import org.openhab.binding.hdpowerview.config.HDPowerViewShadeConfiguration;
 import org.openhab.binding.hdpowerview.internal.api.ShadePosition;
 import org.openhab.binding.hdpowerview.internal.api.responses.Shades.Shade;
 
+/**
+ * Handles commands for an HD Power View shade
+ *
+ * @author Andy Lintner
+ */
 public class HDPowerViewShadeHandler extends AbstractHubbedThingHandler {
 
     private static final int MAX_POSITION = 65535;
@@ -56,6 +62,7 @@ public class HDPowerViewShadeHandler extends AbstractHubbedThingHandler {
         updatePosition(shade.positions);
         updateState(HDPowerViewBindingConstants.CHANNEL_SHADE_BATTERY_LOW,
                 shade.batteryIsLow ? OnOffType.ON : OnOffType.OFF);
+        updateStatus(ThingStatus.ONLINE);
     }
 
     private void updatePosition(ShadePosition pos) {

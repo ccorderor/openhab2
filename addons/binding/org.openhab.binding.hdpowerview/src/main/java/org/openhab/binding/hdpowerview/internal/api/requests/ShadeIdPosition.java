@@ -4,6 +4,11 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 import org.openhab.binding.hdpowerview.internal.api.ShadePosition;
 
+/**
+ * The position of a shade to set
+ *
+ * @author Andy Lintner
+ */
 @JsonSerialize
 class ShadeIdPosition {
 

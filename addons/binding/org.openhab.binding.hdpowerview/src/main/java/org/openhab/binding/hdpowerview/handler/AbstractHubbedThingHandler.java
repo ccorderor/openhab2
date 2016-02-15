@@ -7,6 +7,11 @@ import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Abstract class for Things that are managed through an HD Power View Hub
+ *
+ * @author Andy Lintner
+ */
 abstract class AbstractHubbedThingHandler extends BaseThingHandler {
 
     protected Logger logger = LoggerFactory.getLogger(AbstractHubbedThingHandler.class);

@@ -16,6 +16,11 @@ import org.openhab.binding.hdpowerview.internal.api.responses.Scenes.Scene;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Discovers a HD Power View Scene from an existing Hub
+ *
+ * @author Andy Lintner
+ */
 public class HDPowerViewSceneDiscoveryService extends AbstractDiscoveryService {
 
     private final Logger logger = LoggerFactory.getLogger(HDPowerViewSceneDiscoveryService.class);

@@ -9,6 +9,11 @@ import org.openhab.binding.hdpowerview.internal.api.ShadePosition;
 
 import jcifs.util.Base64;
 
+/**
+ * A list of Shades, as returned by the HD Power View Hub
+ *
+ * @author Andy Lintner
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Shades {
 

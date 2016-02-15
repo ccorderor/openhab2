@@ -8,6 +8,11 @@ import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 import jcifs.util.Base64;
 
+/**
+ * A list of Scenes, as returned by the HD Power View Hub
+ *
+ * @author Andy Lintner
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Scenes {
 

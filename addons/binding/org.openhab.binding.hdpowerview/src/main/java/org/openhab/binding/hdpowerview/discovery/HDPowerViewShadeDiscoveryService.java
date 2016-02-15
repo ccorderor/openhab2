@@ -16,6 +16,11 @@ import org.openhab.binding.hdpowerview.internal.api.responses.Shades.Shade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Discovers an HD Power View Shade from an existing hub
+ *
+ * @author Andy Lintner
+ */
 public class HDPowerViewShadeDiscoveryService extends AbstractDiscoveryService {
 
     private final Logger logger = LoggerFactory.getLogger(HDPowerViewShadeDiscoveryService.class);

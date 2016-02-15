@@ -4,7 +4,8 @@ import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonValue;
 
 /**
- * By all rights, this should be an enum. Jackson bug #960 prevents that.
+ * A shade type, as returned by the HD Power View Hub. By all rights, this should
+ * be an enum. Jackson bug #960 prevents that.
  *
  * @author Andy Lintner
  */
@@ -45,15 +46,19 @@ public class ShadePositionKind {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         ShadePositionKind other = (ShadePositionKind) obj;
-        if (key != other.key)
+        if (key != other.key) {
             return false;
+        }
         return true;
     }
 }

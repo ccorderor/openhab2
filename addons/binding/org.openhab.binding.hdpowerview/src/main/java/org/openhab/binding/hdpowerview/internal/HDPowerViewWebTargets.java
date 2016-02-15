@@ -20,6 +20,11 @@ import org.openhab.binding.hdpowerview.internal.api.responses.Shades;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * JAX-RS targets for communicating with the HD Power View Hub
+ *
+ * @author Andy Lintner
+ */
 public class HDPowerViewWebTargets {
 
     private WebTarget base;

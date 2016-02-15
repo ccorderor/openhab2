@@ -5,6 +5,11 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
+/**
+ * The position of a shade, as returned by the HD Power View HUB.
+ *
+ * @author Andy Lintner
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize
 public class ShadePosition {
