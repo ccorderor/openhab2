@@ -38,7 +38,7 @@
     </thing-type>
 
     <channel-type id="shade-position">
-        <item-type>Dimmer</item-type>
+        <item-type>Rollershutter</item-type>
         <label>Position</label>
         <description>The vertical position of the shade</description>
     </channel-type>

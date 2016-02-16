@@ -4,8 +4,8 @@
         xmlns:binding="http://eclipse.org/smarthome/schemas/binding/v1.0.0"
         xsi:schemaLocation="http://eclipse.org/smarthome/schemas/binding/v1.0.0 http://eclipse.org/smarthome/schemas/binding-1.0.0.xsd">
 
-    <name>HDPowerView Binding</name>
-    <description>The HDPowerView binding provides access to the Hunter Douglas line of PowerView shades.</description>
+    <name>Hunter Douglas PowerView Binding</name>
+    <description>The Hunter Douglas PowerView binding provides access to the Hunter Douglas line of PowerView shades.</description>
     <author>Andy Lintner</author>
 
 </binding:binding>

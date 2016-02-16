@@ -1,3 +1,11 @@
+/**
+ * Copyright (c) 2014-2015 openHAB UG (haftungsbeschraenkt) and others.
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ */
 package org.openhab.binding.hdpowerview.handler;
 
 import java.io.IOException;
@@ -6,6 +14,8 @@ import javax.ws.rs.core.Response;
 
 import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.library.types.PercentType;
+import org.eclipse.smarthome.core.library.types.StopMoveType;
+import org.eclipse.smarthome.core.library.types.UpDownType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
@@ -15,6 +25,8 @@ import org.openhab.binding.hdpowerview.HDPowerViewBindingConstants;
 import org.openhab.binding.hdpowerview.config.HDPowerViewShadeConfiguration;
 import org.openhab.binding.hdpowerview.internal.api.ShadePosition;
 import org.openhab.binding.hdpowerview.internal.api.responses.Shades.Shade;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Handles commands for an HD Power View shade
@@ -25,6 +37,8 @@ public class HDPowerViewShadeHandler extends AbstractHubbedThingHandler {
 
     private static final int MAX_POSITION = 65535;
     private static final int MAX_VANE = 32767;
+
+    private Logger logger = LoggerFactory.getLogger(HDPowerViewShadeHandler.class);
 
     public HDPowerViewShadeHandler(Thing thing) {
         super(thing);
@@ -42,9 +56,11 @@ public class HDPowerViewShadeHandler extends AbstractHubbedThingHandler {
             case HDPowerViewBindingConstants.CHANNEL_SHADE_POSITION:
                 if (command instanceof PercentType) {
                     setPosition(((PercentType) command).intValue());
-                } else if (command instanceof OnOffType) {
+                } else if (command instanceof UpDownType) {
                     setPosition(
-                            ShadePosition.forPosition(((OnOffType) command).equals(OnOffType.ON) ? MAX_POSITION : 0));
+                            ShadePosition.forPosition(((UpDownType) command).equals(UpDownType.UP) ? MAX_POSITION : 0));
+                } else if (command instanceof StopMoveType) {
+                    logger.warn("PowerView shades do not support StopMove commands");
                 }
                 break;
 
