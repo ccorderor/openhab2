@@ -58,7 +58,13 @@ public class HomekitImpl implements Homekit {
             return;
         }
         try {
-            start();
+            if (homekit != null) {
+                bridge.stop();
+                homekit.stop();
+            }
+            if (settings.getPort() != null) {
+                start();
+            }
         } catch (Exception e) {
             logger.error("Could not initialize homekit: " + e.getMessage(), e);
         }
@@ -88,7 +94,7 @@ public class HomekitImpl implements Homekit {
         }
     }
 
-    private void start() throws IOException, InvalidAlgorithmParameterException {
+    private synchronized void start() throws IOException, InvalidAlgorithmParameterException {
         homekit = new HomekitServer(settings.getNetworkInterface(), settings.getPort());
         bridge = homekit.createBridge(new HomekitAuthInfoImpl(storageService, settings.getPin()), settings.getName(),
                 settings.getManufacturer(), settings.getModel(), settings.getSerialNumber());

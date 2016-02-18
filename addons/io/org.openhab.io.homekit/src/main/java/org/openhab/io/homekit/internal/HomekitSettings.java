@@ -25,7 +25,7 @@ public class HomekitSettings {
     private final static String MANUFACTURER = "openHAB";
     private final static String SERIAL_NUMBER = "none";
 
-    private int port = 9123;
+    private Integer port = null;
     private String pin = "031-45-154";
     private boolean useFahrenheitTemperature = false;
     private double minimumTemperature = -100;
@@ -104,7 +104,7 @@ public class HomekitSettings {
         return networkInterface;
     }
 
-    public int getPort() {
+    public Integer getPort() {
         return port;
     }
 
