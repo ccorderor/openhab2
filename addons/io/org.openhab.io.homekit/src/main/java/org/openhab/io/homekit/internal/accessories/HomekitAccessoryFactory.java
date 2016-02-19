@@ -42,6 +42,15 @@ public class HomekitAccessoryFactory {
 
             case HUMIDITY_SENSOR:
                 return new HomekitHumiditySensorImpl(taggedItem, itemRegistry, updater);
+
+            case WINDOW_COVERING:
+                return new HomekitWindowCoveringImpl(taggedItem, itemRegistry, updater);
+
+            case HORIONTAL_TILT_WINDOW_COVERING:
+                return new HomekitHorizontalTiltingWindowCoveringImpl(taggedItem, itemRegistry, updater);
+
+            case VERTICAL_TILT_WINDOW_COVERING:
+                return new HomekitVerticalTiltingWindowCoveringImpl(taggedItem, itemRegistry, updater);
         }
 
         throw new Exception("Unknown homekit type: " + taggedItem.getDeviceType());

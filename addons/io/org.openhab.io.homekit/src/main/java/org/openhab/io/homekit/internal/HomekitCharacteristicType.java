@@ -21,7 +21,11 @@ public enum HomekitCharacteristicType {
 
     CURRENT_TEMPERATURE("CurrentTemperature"),
     TARGET_TEMPERATURE("TargetTemperature"),
-    HEATING_COOLING_MODE("homekit:HeatingCoolingMode");
+    HEATING_COOLING_MODE("homekit:HeatingCoolingMode"),
+    POSITION("position"),
+    OBSTRUCTION_DETECTED("obstructionDetected"),
+    HORIZONTAL_TILT_ANGLE("horizontalTiltAngle"),
+    VERTICAL_TILT_ANGLE("verticalTiltAngle");
 
     private static final Map<String, HomekitCharacteristicType> tagMap = new HashMap<>();
 
