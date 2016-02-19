@@ -4,6 +4,7 @@ import java.util.concurrent.CompletableFuture;
 
 import org.eclipse.smarthome.core.items.GenericItem;
 import org.eclipse.smarthome.core.items.ItemRegistry;
+import org.eclipse.smarthome.core.library.items.DimmerItem;
 import org.eclipse.smarthome.core.library.types.PercentType;
 import org.openhab.io.homekit.internal.HomekitAccessoryUpdater;
 import org.openhab.io.homekit.internal.HomekitCharacteristicType;
@@ -53,8 +54,8 @@ public class HomekitHorizontalTiltingWindowCoveringImpl extends HomekitWindowCov
 
     @Override
     public CompletableFuture<Void> setTargetHorizontalTiltAngle(int angle) throws Exception {
-        GenericItem item = getGenericItem(horizontalTiltAngleItemName);
-        item.setState(new PercentType((int) Math.max(0, Math.round(angle / 90d * 100d))));
+        DimmerItem item = getGenericItem(horizontalTiltAngleItemName);
+        item.send(new PercentType((int) Math.max(0, Math.round(angle / 90d * 100d))));
         return CompletableFuture.completedFuture(null);
     }
 

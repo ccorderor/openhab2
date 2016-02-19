@@ -104,7 +104,7 @@ public class HomekitWindowCoveringImpl extends AbstractHomekitAccessoryImpl<Grou
     @Override
     public CompletableFuture<Void> setTargetPosition(int target) throws Exception {
         RollershutterItem item = getRollerShutter();
-        item.setState(new PercentType(100 - target));
+        item.send(new PercentType(100 - target));
         return CompletableFuture.completedFuture(null);
     }
 
