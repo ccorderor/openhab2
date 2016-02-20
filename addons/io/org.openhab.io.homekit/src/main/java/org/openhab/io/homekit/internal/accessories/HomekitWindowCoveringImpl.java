@@ -1,3 +1,11 @@
+/**
+ * Copyright (c) 2014-2015 openHAB UG (haftungsbeschraenkt) and others.
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ */
 package org.openhab.io.homekit.internal.accessories;
 
 import java.util.concurrent.CompletableFuture;
@@ -18,6 +26,11 @@ import com.beowulfe.hap.HomekitCharacteristicChangeCallback;
 import com.beowulfe.hap.accessories.WindowCovering;
 import com.beowulfe.hap.accessories.properties.WindowCoveringPositionState;
 
+/**
+ * openHAB implementation of a HomeKit Window Covering
+ * 
+ * @author Andy Lintner
+ */
 public class HomekitWindowCoveringImpl extends AbstractHomekitAccessoryImpl<GroupItem>
         implements WindowCovering, GroupedAccessory {
 

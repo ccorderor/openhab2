@@ -51,6 +51,9 @@ public class HomekitAccessoryFactory {
 
             case VERTICAL_TILT_WINDOW_COVERING:
                 return new HomekitVerticalTiltingWindowCoveringImpl(taggedItem, itemRegistry, updater);
+
+            case GARAGE_DOOR:
+                return new HomekitGarageDoorImpl(taggedItem, itemRegistry, updater);
         }
 
         throw new Exception("Unknown homekit type: " + taggedItem.getDeviceType());

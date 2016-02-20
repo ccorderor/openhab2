@@ -27,7 +27,8 @@ public enum HomekitDeviceType {
     THERMOSTAT("Thermostat"),
     WINDOW_COVERING("WindowCovering"),
     HORIONTAL_TILT_WINDOW_COVERING("HorizontalTiltWindowCovering"),
-    VERTICAL_TILT_WINDOW_COVERING("VerticalTiltWindowCovering");
+    VERTICAL_TILT_WINDOW_COVERING("VerticalTiltWindowCovering"),
+    GARAGE_DOOR("GarageDoor");
 
 
     private static final Map<String, HomekitDeviceType> tagMap = new HashMap<>();
