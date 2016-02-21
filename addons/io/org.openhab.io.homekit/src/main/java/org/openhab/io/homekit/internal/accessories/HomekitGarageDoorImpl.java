@@ -113,7 +113,7 @@ public class HomekitGarageDoorImpl extends AbstractHomekitAccessoryImpl<GroupIte
             switch (currentState) {
                 case CLOSING:
                 case CLOSED:
-                    return DoorState.CLOSING;
+                    return DoorState.CLOSED;
 
                 default:
                     return DoorState.OPEN;
