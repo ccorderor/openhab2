@@ -10,6 +10,7 @@ package org.openhab.io.homekit.internal;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.function.BiConsumer;
 
 import org.eclipse.smarthome.core.items.GenericItem;
 import org.eclipse.smarthome.core.items.Item;
@@ -38,6 +39,10 @@ public class HomekitAccessoryUpdater {
     }
 
     public void subscribe(GenericItem item, String key, HomekitCharacteristicChangeCallback callback) {
+        subscribe(item, key, (oldState, newState) -> callback.changed());
+    }
+
+    public void subscribe(GenericItem item, String key, BiConsumer<State, State> callback) {
         if (item == null) {
             return;
         }
@@ -50,7 +55,7 @@ public class HomekitAccessoryUpdater {
                 logger.error("Received duplicate subscription on " + item.getName());
                 unsubscribe(item, key);
             }
-            Subscription subscription = (changedItem, oldState, newState) -> callback.changed();
+            Subscription subscription = (changedItem, oldState, newState) -> callback.accept(oldState, newState);
             item.addStateChangeListener(subscription);
             return subscription;
         });
@@ -102,23 +107,30 @@ public class HomekitAccessoryUpdater {
 
         @Override
         public boolean equals(Object obj) {
-            if (this == obj)
+            if (this == obj) {
                 return true;
-            if (obj == null)
+            }
+            if (obj == null) {
                 return false;
-            if (getClass() != obj.getClass())
+            }
+            if (getClass() != obj.getClass()) {
                 return false;
+            }
             ItemKey other = (ItemKey) obj;
             if (item == null) {
-                if (other.item != null)
+                if (other.item != null) {
                     return false;
-            } else if (!item.equals(other.item))
+                }
+            } else if (!item.equals(other.item)) {
                 return false;
+            }
             if (key == null) {
-                if (other.key != null)
+                if (other.key != null) {
                     return false;
-            } else if (!key.equals(other.key))
+                }
+            } else if (!key.equals(other.key)) {
                 return false;
+            }
             return true;
         }
     }

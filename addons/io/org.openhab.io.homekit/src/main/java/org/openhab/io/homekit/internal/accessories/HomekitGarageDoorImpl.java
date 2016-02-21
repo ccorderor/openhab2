@@ -81,11 +81,7 @@ public class HomekitGarageDoorImpl extends AbstractHomekitAccessoryImpl<GroupIte
         Item item = getItemRegistry().get(doorStateItemName);
         PercentType state = (PercentType) item.getStateAs(PercentType.class);
         if (state != null) {
-            if (state.intValue() == 100) {
-                return CompletableFuture.completedFuture(DoorState.CLOSED);
-            } else {
-                return CompletableFuture.completedFuture(DoorState.OPEN);
-            }
+            return CompletableFuture.completedFuture(targetStateFromPercentType(state));
         } else {
             return CompletableFuture.completedFuture(getGranularState());
         }
@@ -149,7 +145,18 @@ public class HomekitGarageDoorImpl extends AbstractHomekitAccessoryImpl<GroupIte
 
     @Override
     public void subscribeTargetDoorState(HomekitCharacteristicChangeCallback callback) {
-        getUpdater().subscribe(getGenericItem(doorStateItemName), "targetState", callback);
+        getUpdater().subscribe(getGenericItem(doorStateItemName), "targetState", (oldState, newState) -> {
+            if (newState instanceof PercentType) {
+                if (!targetStateFromPercentType((PercentType) newState)
+                        .equals(targetStateFromPercentType((PercentType) oldState))) {
+                    callback.changed();
+                }
+                // Target state for a PercentType collapses several current states to a single state. Only fire callback
+                // if target state changed.
+            } else {
+                callback.changed();
+            }
+        });
     }
 
     @Override
@@ -167,6 +174,14 @@ public class HomekitGarageDoorImpl extends AbstractHomekitAccessoryImpl<GroupIte
     @Override
     public void unsubscribeTargetDoorState() {
         getUpdater().unsubscribe(getGenericItem("doorStateItemname"), "targetState");
+    }
+
+    private DoorState targetStateFromPercentType(PercentType state) {
+        if (state.intValue() == 100) {
+            return DoorState.CLOSED;
+        } else {
+            return DoorState.OPEN;
+        }
     }
 
     private DoorState getGranularState() {
