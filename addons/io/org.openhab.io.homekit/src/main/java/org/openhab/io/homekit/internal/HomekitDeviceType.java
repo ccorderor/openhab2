@@ -26,8 +26,6 @@ public enum HomekitDeviceType {
     TEMPERATURE_SENSOR("CurrentTemperature"),
     THERMOSTAT("Thermostat"),
     WINDOW_COVERING("WindowCovering"),
-    HORIONTAL_TILT_WINDOW_COVERING("HorizontalTiltWindowCovering"),
-    VERTICAL_TILT_WINDOW_COVERING("VerticalTiltWindowCovering"),
     GARAGE_DOOR("GarageDoor");
 
 

@@ -12,6 +12,8 @@ import org.eclipse.smarthome.core.items.ItemRegistry;
 import org.openhab.io.homekit.internal.HomekitAccessoryUpdater;
 import org.openhab.io.homekit.internal.HomekitSettings;
 import org.openhab.io.homekit.internal.HomekitTaggedItem;
+import org.openhab.io.homekit.internal.accessories.garagedoor.HomekitGarageDoorFactory;
+import org.openhab.io.homekit.internal.accessories.windowcovering.HomekitWindowCoveringFactory;
 
 import com.beowulfe.hap.HomekitAccessory;
 
@@ -44,16 +46,10 @@ public class HomekitAccessoryFactory {
                 return new HomekitHumiditySensorImpl(taggedItem, itemRegistry, updater);
 
             case WINDOW_COVERING:
-                return new HomekitWindowCoveringImpl(taggedItem, itemRegistry, updater);
-
-            case HORIONTAL_TILT_WINDOW_COVERING:
-                return new HomekitHorizontalTiltingWindowCoveringImpl(taggedItem, itemRegistry, updater);
-
-            case VERTICAL_TILT_WINDOW_COVERING:
-                return new HomekitVerticalTiltingWindowCoveringImpl(taggedItem, itemRegistry, updater);
+                return HomekitWindowCoveringFactory.create(taggedItem, itemRegistry, updater);
 
             case GARAGE_DOOR:
-                return new HomekitGarageDoorImpl(taggedItem, itemRegistry, updater);
+                return HomekitGarageDoorFactory.create(taggedItem, itemRegistry, updater);
         }
 
         throw new Exception("Unknown homekit type: " + taggedItem.getDeviceType());

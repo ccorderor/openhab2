@@ -17,6 +17,7 @@ import org.openhab.io.homekit.internal.accessories.HomekitAccessoryFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.beowulfe.hap.HomekitAccessory;
 import com.beowulfe.hap.HomekitRoot;
 
 /**
@@ -95,17 +96,21 @@ public class HomekitChangeListener implements ItemRegistryChangeListener {
 
     private void createRootDevice(HomekitTaggedItem taggedItem) {
         try {
-            logger.debug("Adding homekit device " + taggedItem.getItem().getName());
-            accessoryRegistry
-                    .addRootDevice(HomekitAccessoryFactory.create(taggedItem, itemRegistry, updater, settings));
-            logger.debug("Added homekit device " + taggedItem.getItem().getName());
+            logger.debug("Adding homekit device {}", taggedItem.getItem().getName());
+            HomekitAccessory accessory = HomekitAccessoryFactory.create(taggedItem, itemRegistry, updater, settings);
+            if (accessory != null) {
+                accessoryRegistry.addRootDevice(accessory);
+                logger.debug("Added homekit device {}", taggedItem.getItem().getName());
+            } else {
+                logger.warn("Could not add homekit device {}", taggedItem.getItem().getName());
+            }
         } catch (Exception e) {
             logger.error("Could not add device: " + e.getMessage(), e);
         }
     }
 
     private void createCharacteristic(HomekitTaggedItem taggedItem) {
-        logger.debug("Adding grouped homekit characteristic " + taggedItem.getItem().getName());
+        logger.debug("Adding grouped homekit characteristic {}", taggedItem.getItem().getName());
         accessoryRegistry.addCharacteristic(taggedItem);
     }
 }

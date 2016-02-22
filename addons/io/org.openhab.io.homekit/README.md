@@ -83,6 +83,48 @@ A full list of supported accessory types can be found in the table below.
   <td>Number</td>
   <td>A target temperature that will engage the thermostat's heating and cooling actions as necessary, depending on the heatingCoolingMode</td>
  </tr>
+ <tr>
+  <td>WindowCovering</td>
+  <td>&nbsp;</td>
+  <td>Group</td>
+  <td>A group representing a window covering (i.e. blinds/shades/screens), consisting of, at a minimum, the position characteristic below</td>
+ </tr>
+ <tr>
+  <td>&nbsp;</td>
+  <td>position</td>
+  <td>Rollershutter</td>
+  <td>A Rollershutter that indicates the position of the window covering</td>
+ </tr>
+ <tr>
+  <td>&nbsp;</td>
+  <td>obstructionDetected</td>
+  <td>Switch</td>
+  <td>An optional switch that, in its ON state, indicates the window covering has detected an obstruction and cannot complete its operation</td>
+ <tr>
+ <tr>
+  <td>HorizontalTiltWindowCovering</td>
+  <td>&nbsp;</td>
+  <td>Group</td>
+  <td>A group representing a window covering capable of horizontal tilt, consisting of the characteristics from WindowCovering, as well as the below.
+ </tr>
+ <tr>
+  <td>&nbsp;</td>
+  <td>horizontalTiltAngle</td>
+  <td>Dimmer</td>
+  <td>The angle at which the window covering is tilted, with 0% as 0&#176;, and 100% as 90&#176;</td>
+ </tr>
+ <tr>
+  <td>VerticalTiltWindowCovering</td>
+  <td>&nbsp;</td>
+  <td>Group</td>
+  <td>A group representing a window covering capable of vertical tilt, consisting of the characteristics from WindowCovering, as well as the below.
+ </tr>
+ <tr>
+  <td>&nbsp;</td>
+  <td>verticalTiltAngle</td>
+  <td>Dimmer</td>
+  <td>The angle at which the window covering is tilted, with 0% as 0&#176;, and 100% as 90&#176;</td>
+ </tr>
 </table>
 
 See the sample below for example items:
@@ -95,6 +137,10 @@ Group gDownstairsThermostat "Downstairs Thermostat" (gFF) [ "Thermostat" ]
 Number DownstairsThermostatCurrentTemp "Downstairs Thermostat Current Temperature" (gDownstairsThermostat) [ "CurrentTemperature" ]
 Number DownstairsThermostatTargetTemperature "Downstairs Thermostat Target Temperature" (gDownstairsThermostat) [ "TargetTemperature" ]
 String DownstairsThermostatHeatingCoolingMode "Downstairs Thermostat Heating/Cooling Mode" (gDownstairsThermostat) [ "homekit:HeatingCoolingMode" ]
+Group gBedroomBlinds (gBedroom) [ "homekit:HorizontalTiltWindowCovering" ]
+Rollershutter BedroomBlindsPosition (gBedroomblinds) [ "homekit:position" ]
+Dimmer BedroomBlindsVane (gBedroomblinds) [ "homekit:verticalTiltAngle" ]
+Rollershutter GarageDoor [ "homekit:GarageDoor" ]
 ```
 
 ## Additional Notes

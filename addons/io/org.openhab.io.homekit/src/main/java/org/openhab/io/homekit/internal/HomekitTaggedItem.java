@@ -33,7 +33,7 @@ public class HomekitTaggedItem {
     private Logger logger = LoggerFactory.getLogger(HomekitTaggedItem.class);
     private final int id;
 
-    public HomekitTaggedItem(Item item, ItemRegistry itemRegistry) {
+    public HomekitTaggedItem(Item item) {
         this.item = item;
         for (String tag : item.getTags()) {
             if (item instanceof DimmerItem) {

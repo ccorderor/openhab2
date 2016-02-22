@@ -26,7 +26,8 @@ public enum HomekitCharacteristicType {
     OBSTRUCTION_DETECTED("obstructionDetected"),
     HORIZONTAL_TILT_ANGLE("horizontalTiltAngle"),
     VERTICAL_TILT_ANGLE("verticalTiltAngle"),
-    DOOR_STATE("doorState");
+    DOOR_STATE("doorState"),
+    TARGET_DOOR_STATE("targetDoorState");
 
     private static final Map<String, HomekitCharacteristicType> tagMap = new HashMap<>();
 

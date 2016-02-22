@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-package org.openhab.io.homekit.internal.accessories;
+package org.openhab.io.homekit.internal.accessories.windowcovering;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -26,7 +26,7 @@ import com.beowulfe.hap.accessories.HorizontalTiltingWindowCovering;
  *
  * @author Andy Lintner
  */
-public class HomekitHorizontalTiltingWindowCoveringImpl extends HomekitWindowCoveringImpl
+class HomekitHorizontalTiltingWindowCoveringImpl extends HomekitWindowCoveringGroupedImpl
         implements HorizontalTiltingWindowCovering {
 
     private String horizontalTiltAngleItemName;

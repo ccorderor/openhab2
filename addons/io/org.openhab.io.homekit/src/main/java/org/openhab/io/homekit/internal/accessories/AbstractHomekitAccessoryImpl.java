@@ -23,7 +23,7 @@ import com.beowulfe.hap.HomekitAccessory;
  *
  * @author Andy Lintner
  */
-abstract class AbstractHomekitAccessoryImpl<T extends GenericItem> implements HomekitAccessory {
+abstract public class AbstractHomekitAccessoryImpl<T extends GenericItem> implements HomekitAccessory {
 
     private final int accessoryId;
     private final String itemName;

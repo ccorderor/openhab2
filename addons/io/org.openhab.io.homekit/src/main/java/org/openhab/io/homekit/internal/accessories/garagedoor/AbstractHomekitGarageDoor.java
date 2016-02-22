@@ -6,22 +6,21 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-package org.openhab.io.homekit.internal.accessories;
+package org.openhab.io.homekit.internal.accessories.garagedoor;
 
 import java.util.concurrent.CompletableFuture;
 
 import org.eclipse.smarthome.core.items.GenericItem;
-import org.eclipse.smarthome.core.items.GroupItem;
 import org.eclipse.smarthome.core.items.Item;
 import org.eclipse.smarthome.core.items.ItemRegistry;
 import org.eclipse.smarthome.core.library.items.RollershutterItem;
 import org.eclipse.smarthome.core.library.items.StringItem;
-import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.library.types.PercentType;
 import org.eclipse.smarthome.core.library.types.StringType;
 import org.eclipse.smarthome.core.library.types.UpDownType;
 import org.openhab.io.homekit.internal.HomekitAccessoryUpdater;
 import org.openhab.io.homekit.internal.HomekitTaggedItem;
+import org.openhab.io.homekit.internal.accessories.AbstractHomekitAccessoryImpl;
 import org.openhab.io.homekit.internal.accessories.characteristics.OpenHabDoorState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,75 +30,28 @@ import com.beowulfe.hap.accessories.GarageDoor;
 import com.beowulfe.hap.accessories.properties.DoorState;
 
 /**
- * openHAB impelementation of HomeKit GarageDoor accessory
+ * Abstract implementation of HomeKit Garage Door accessory
  *
  * @author Andy Lintner
  */
-public class HomekitGarageDoorImpl extends AbstractHomekitAccessoryImpl<GroupItem>
-        implements GarageDoor, GroupedAccessory {
+public abstract class AbstractHomekitGarageDoor<T extends GenericItem> extends AbstractHomekitAccessoryImpl<T>
+        implements GarageDoor {
 
-    private Logger logger = LoggerFactory.getLogger(HomekitGarageDoorImpl.class);
-    private final String groupName;
-    private String obstructionDetectedItemName;
-    private String doorStateItemName;
+    protected Logger logger = LoggerFactory.getLogger(HomekitGarageDoorGroupedImpl.class);
 
-    public HomekitGarageDoorImpl(HomekitTaggedItem taggedItem, ItemRegistry itemRegistry,
-            HomekitAccessoryUpdater updater) {
-        super(taggedItem, itemRegistry, updater, GroupItem.class);
-        this.groupName = taggedItem.getItem().getName();
-    }
-
-    @Override
-    public String getGroupName() {
-        return groupName;
-    }
-
-    @Override
-    public void addCharacteristic(HomekitTaggedItem item) {
-        switch (item.getCharacteristicType()) {
-            case DOOR_STATE:
-                this.doorStateItemName = item.getItem().getName();
-                break;
-
-            case OBSTRUCTION_DETECTED:
-                this.obstructionDetectedItemName = item.getItem().getName();
-                break;
-
-            default:
-                logger.error("Unrecognized garage door characteristic: " + item.getCharacteristicType().name());
-                break;
-        }
-    }
-
-    @Override
-    public boolean isComplete() {
-        return doorStateItemName != null;
+    public AbstractHomekitGarageDoor(HomekitTaggedItem taggedItem, ItemRegistry itemRegistry,
+            HomekitAccessoryUpdater updater, Class<T> expectedItemClass) {
+        super(taggedItem, itemRegistry, updater, expectedItemClass);
     }
 
     @Override
     public CompletableFuture<DoorState> getCurrentDoorState() {
-        Item item = getItemRegistry().get(doorStateItemName);
+        Item item = getItemRegistry().get(getDoorStateItemName());
         PercentType state = (PercentType) item.getStateAs(PercentType.class);
         if (state != null) {
-            return CompletableFuture.completedFuture(targetStateFromPercentType(state));
+            return CompletableFuture.completedFuture(booleanStateFromPercentType(state));
         } else {
             return CompletableFuture.completedFuture(getGranularState());
-        }
-    }
-
-    @Override
-    public CompletableFuture<Boolean> getObstructionDetected() {
-        if (obstructionDetectedItemName == null) {
-            return CompletableFuture.completedFuture(false);
-        } else {
-            Item item = getItemRegistry().get(obstructionDetectedItemName);
-            OnOffType state = (OnOffType) item.getStateAs(OnOffType.class);
-            if (state == null) {
-                logger.warn("Could not get OnOffType from {}", obstructionDetectedItemName);
-                return CompletableFuture.completedFuture(false);
-            } else {
-                return CompletableFuture.completedFuture(state == OnOffType.ON ? true : false);
-            }
         }
     }
 
@@ -120,7 +72,7 @@ public class HomekitGarageDoorImpl extends AbstractHomekitAccessoryImpl<GroupIte
 
     @Override
     public CompletableFuture<Void> setTargetDoorState(DoorState state) throws Exception {
-        GenericItem item = getGenericItem(doorStateItemName);
+        GenericItem item = getGenericItem(getDoorStateItemName());
         if (item instanceof RollershutterItem) {
             ((RollershutterItem) item).send(state == DoorState.OPEN ? UpDownType.UP : UpDownType.DOWN);
         } else if (item instanceof StringItem) {
@@ -133,28 +85,24 @@ public class HomekitGarageDoorImpl extends AbstractHomekitAccessoryImpl<GroupIte
 
     @Override
     public void subscribeCurrentDoorState(HomekitCharacteristicChangeCallback callback) {
-        getUpdater().subscribe(getGenericItem(doorStateItemName), "currentState", callback);
-    }
-
-    @Override
-    public void subscribeObstructionDetected(HomekitCharacteristicChangeCallback callback) {
-        if (obstructionDetectedItemName != null) {
-            getUpdater().subscribe(getGenericItem(obstructionDetectedItemName), callback);
-        }
+        getUpdater().subscribe(getGenericItem(getDoorStateItemName()), "currentState", callback);
     }
 
     @Override
     public void subscribeTargetDoorState(HomekitCharacteristicChangeCallback callback) {
-        getUpdater().subscribe(getGenericItem(doorStateItemName), "targetState", (oldState, newState) -> {
+        getUpdater().subscribe(getGenericItem(getDoorStateItemName()), "targetState", (oldState, newState) -> {
             if (newState instanceof PercentType) {
-                if (!targetStateFromPercentType((PercentType) newState)
-                        .equals(targetStateFromPercentType((PercentType) oldState))) {
+                if (!booleanStateFromPercentType((PercentType) newState)
+                        .equals(booleanStateFromPercentType((PercentType) oldState))) {
                     callback.changed();
                 }
                 // Target state for a PercentType collapses several current states to a single state. Only fire callback
                 // if target state changed.
             } else {
-                callback.changed();
+                if (!booleanStateFromEnumType((StringType) newState)
+                        .equals(booleanStateFromEnumType((StringType) oldState))) {
+                    callback.changed();
+                }
             }
         });
     }
@@ -165,18 +113,13 @@ public class HomekitGarageDoorImpl extends AbstractHomekitAccessoryImpl<GroupIte
     }
 
     @Override
-    public void unsubscribeObstructionDetected() {
-        if (obstructionDetectedItemName != null) {
-            getUpdater().unsubscribe(getGenericItem(obstructionDetectedItemName));
-        }
-    }
-
-    @Override
     public void unsubscribeTargetDoorState() {
         getUpdater().unsubscribe(getGenericItem("doorStateItemname"), "targetState");
     }
 
-    private DoorState targetStateFromPercentType(PercentType state) {
+    protected abstract String getDoorStateItemName();
+
+    private DoorState booleanStateFromPercentType(PercentType state) {
         if (state.intValue() == 100) {
             return DoorState.CLOSED;
         } else {
@@ -184,11 +127,21 @@ public class HomekitGarageDoorImpl extends AbstractHomekitAccessoryImpl<GroupIte
         }
     }
 
+    private DoorState booleanStateFromEnumType(StringType state) {
+        switch (OpenHabDoorState.fromString(state.toString())) {
+            case CLOSED:
+                return DoorState.CLOSED;
+
+            default:
+                return DoorState.OPEN;
+        }
+    }
+
     private DoorState getGranularState() {
-        Item stateItem = getItemRegistry().get(doorStateItemName);
+        Item stateItem = getItemRegistry().get(getDoorStateItemName());
         StringType stringState = (StringType) stateItem.getStateAs(StringType.class);
         if (stringState == null) {
-            logger.warn("Could not get StringType from {}", doorStateItemName);
+            logger.warn("Could not get StringType from {}", getDoorStateItemName());
             return DoorState.OPEN;
         } else {
             return OpenHabDoorState.fromString(stringState.toString()).toHomekitState();
