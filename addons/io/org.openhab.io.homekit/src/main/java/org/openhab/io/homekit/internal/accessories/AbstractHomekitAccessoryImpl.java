@@ -9,6 +9,8 @@
 package org.openhab.io.homekit.internal.accessories;
 
 import org.eclipse.smarthome.core.items.GenericItem;
+import org.eclipse.smarthome.core.items.GroupItem;
+import org.eclipse.smarthome.core.items.Item;
 import org.eclipse.smarthome.core.items.ItemRegistry;
 import org.openhab.io.homekit.internal.HomekitAccessoryUpdater;
 import org.openhab.io.homekit.internal.HomekitTaggedItem;
@@ -93,12 +95,13 @@ abstract public class AbstractHomekitAccessoryImpl<T extends GenericItem> implem
         return updater;
     }
 
-    protected GenericItem getItem() {
-        return (GenericItem) getItemRegistry().get(getItemName());
+    @SuppressWarnings("unchecked")
+    protected T getItem() {
+        return (T) getItemRegistry().get(getItemName());
     }
 
     @SuppressWarnings("unchecked")
-    protected <T extends GenericItem> T getGenericItem(String name) {
+    protected <U extends GenericItem> U getGenericItem(String name) {
         Item item = getItemRegistry().get(name);
         if (item == null) {
             return null;
@@ -106,6 +109,6 @@ abstract public class AbstractHomekitAccessoryImpl<T extends GenericItem> implem
         if (!(item instanceof GenericItem)) {
             throw new RuntimeException("Expected GenericItem, found " + item.getClass().getCanonicalName());
         }
-        return (T) item;
+        return (U) item;
     }
 }
