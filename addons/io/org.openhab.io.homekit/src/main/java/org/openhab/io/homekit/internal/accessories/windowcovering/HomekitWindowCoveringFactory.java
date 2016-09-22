@@ -37,10 +37,10 @@ public class HomekitWindowCoveringFactory {
             boolean hasHorizontalTilt = false;
             for (Item groupItem : ((GroupItem) item).getMembers()) {
                 if (HomekitTaggedItem.isTagged(groupItem)) {
-                    if (new HomekitTaggedItem(groupItem)
+                    if (new HomekitTaggedItem(groupItem, itemRegistry)
                             .getCharacteristicType() == HomekitCharacteristicType.HORIZONTAL_TILT_ANGLE) {
                         hasHorizontalTilt = true;
-                    } else if (new HomekitTaggedItem(groupItem)
+                    } else if (new HomekitTaggedItem(groupItem, itemRegistry)
                             .getCharacteristicType() == HomekitCharacteristicType.VERTICAL_TILT_ANGLE) {
                         hasVerticalTilt = true;
                     }
